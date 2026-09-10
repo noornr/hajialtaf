@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Haji Althaf Delhi Fried Chicken">
+  <meta name="theme-color" content="#050505">
   <title>Haji Althaf — Delhi Fried Chicken</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -12,24 +12,27 @@
 </head>
 <body>
 
-  <div class="topbar">
-    <span>Welcome to Haji Althaf - Delhi's Best Fried Chicken!</span>
-    <span>Follow Us: &nbsp; <b>●</b> &nbsp; <b>◎</b> &nbsp; <b>▶</b></span>
+  <div class="top-strip">
+    <div>Welcome to Haji Althaf — Delhi's Best Fried Chicken!</div>
+    <div class="top-right">
+      <span>Follow Us:</span><span class="social-dot">f</span><span class="social-dot">◎</span><span class="social-dot">▶</span>
+      <span class="divider"></span><span>Call Us: +91 98765 43210</span><span class="divider"></span><span>📍 Delhi, India</span>
+    </div>
   </div>
 
-  <header class="header">
-    <a class="brand" href="#home">
-      <div class="brand-mark">♨</div>
+  <header class="site-header">
+    <a class="logo" href="#home" aria-label="Haji Althaf home">
+      <div class="logo-emblem">♨</div>
       <div>
-        <strong>HAJI ALTHAF</strong>
-        <small>Delhi Fried Chicken</small>
+        <div class="logo-main">HAJI ALTHAF</div>
+        <div class="logo-sub">Delhi Fried Chicken</div>
       </div>
     </a>
 
-    <button class="menu-toggle" aria-label="Open menu">☰</button>
+    <button class="mobile-toggle" id="mobileToggle" aria-label="Open navigation">☰</button>
 
-    <nav class="nav">
-      <a class="active" href="#home">Home</a>
+    <nav class="main-nav" id="mainNav">
+      <a href="#home" class="active">Home</a>
       <a href="#menu">Menu</a>
       <a href="#about">About Us</a>
       <a href="#gallery">Gallery</a>
@@ -37,137 +40,165 @@
       <a href="#contact">Contact</a>
     </nav>
 
-    <button class="order-btn" onclick="openOrder()">Order Now 🛒</button>
+    <button class="primary-btn header-order" onclick="openOrder()">
+      Order Now <span>🛒</span>
+    </button>
   </header>
 
   <main id="home">
     <section class="hero">
-      <div class="hero-menu">
-        <div class="menu-board">
-          <div class="mini-logo">♨</div>
-          <h2>HAJI ALTHAF</h2>
-          <div class="script">Delhi Fried Chicken</div>
-          <div class="board-title">MENU</div>
-          <div class="menu-lines">
-            <div><span>1. Full Chicken Fry</span><b>480</b></div>
-            <div><span>2. Half Chicken Fry</span><b>240</b></div>
-            <div><span>3. Chest Pcs</span><b>140</b></div>
-            <div><span>4. Leg Pcs</span><b>120</b></div>
-            <div><span>5. Chicken Pakoda</span><b>120</b></div>
-            <div><span>6. Chicken Kabab</span><b>140</b></div>
-            <div><span>7. Chicken Lollipop</span><b>140</b></div>
-            <div><span>8. Chicken Khima</span><b>80</b></div>
-            <div><span>9. Apollo Fish Rost</span><b>200</b></div>
-            <div><span>10. Mutton Boti</span><b>80</b></div>
-            <div><span>11. Mutton Paya</span><b>120</b></div>
-            <div><span>12. Rumali Roti</span><b>20</b></div>
+      <div class="hero-content">
+        <div class="hero-copy">
+          <div class="micro-title">CRISPY . SPICY . JUICY</div>
+          <h1>DELHI FRIED<br><span>CHICKEN</span></h1>
+          <div class="hero-script">Made with Passion</div>
+          <p>At Haji Althaf, we serve the most delicious and authentic Delhi style fried chicken with bold flavors and perfect spices.</p>
+
+          <div class="hero-actions">
+            <a class="primary-btn" href="#menu">🍴 &nbsp; View Menu</a>
+            <button class="outline-btn" onclick="openOrder()">🛒 &nbsp; Order Now</button>
           </div>
-          <div class="board-foot">BOLD FLAVORS<br><small>MADE WITH PASSION</small></div>
-        </div>
-      </div>
 
-      <div class="hero-copy">
-        <p class="eyebrow">CRISPY. SPICY. JUICY.</p>
-        <h1>DELHI FRIED<br><span>CHICKEN</span></h1>
-        <div class="hero-script">Made with Passion</div>
-        <p class="hero-desc">At Haji Althaf, we serve you the most delicious<br>and authentic Delhi style fried chicken<br>with bold flavors and perfect spices.</p>
-        <div class="hero-actions">
-          <a class="gold-btn" href="#menu">🍴 View Menu</a>
-          <button class="dark-btn" onclick="openOrder()">🛒 Order Now</button>
+          <div class="mini-badges">
+            <div><span>♧</span><b>100%</b><small>HALAL</small></div>
+            <div><span>♨</span><b>PREMIUM</b><small>INGREDIENTS</small></div>
+            <div><span>◒</span><b>DELHI STYLE</b><small>AUTHENTIC TASTE</small></div>
+          </div>
         </div>
-      </div>
 
-      <div class="hero-food">
-        <div class="food-plate">
-          <div class="fried-piece p1"></div>
-          <div class="fried-piece p2"></div>
-          <div class="fried-piece p3"></div>
-          <div class="fried-piece p4"></div>
-          <span class="leaf">🌿</span>
+        <div class="hero-visual">
+          <div class="seal">♨<strong>THE REAL</strong><small>DELHI FRIED CHICKEN</small><em>EST. 2020</em></div>
+          <img src="assets/hero-food.jpg" alt="Crispy fried chicken">
+          <div class="scribble">Good<br>Food<br>Good<br>Mood</div>
         </div>
       </div>
     </section>
 
-    <section class="features">
-      <div><span>♨</span><div><b>Authentic Taste</b><small>Original Delhi style<br>recipes & spices</small></div></div>
-      <div><span>♨</span><div><b>Crispy & Juicy</b><small>Perfectly fried for that<br>perfect crunch</small></div></div>
-      <div><span>♧</span><div><b>Quality Ingredients</b><small>We use only fresh &<br>premium ingredients</small></div></div>
-      <div><span>🛵</span><div><b>Fast Delivery</b><small>Quick service at your<br>doorstep</small></div></div>
+    <section class="feature-bar">
+      <div class="feature"><span class="feature-icon">♨</span><div><b>Authentic Taste</b><small>Original Delhi style<br>recipes & spices</small></div></div>
+      <div class="feature"><span class="feature-icon">♨</span><div><b>Crispy & Juicy</b><small>Perfectly fried for that<br>perfect crunch</small></div></div>
+      <div class="feature"><span class="feature-icon">♧</span><div><b>Quality Ingredients</b><small>We use only fresh &<br>premium ingredients</small></div></div>
+      <div class="feature"><span class="feature-icon">🛵</span><div><b>Fast Delivery</b><small>Quick service at your<br>doorstep</small></div></div>
     </section>
 
-    <section id="menu" class="menu-section section">
-      <div class="section-head">
-        <p>Our Special</p>
+    <section class="menu-section section" id="menu">
+      <div class="section-heading">
+        <div class="script-title">Our Special</div>
         <h2>MENU</h2>
+        <div class="section-line"><span></span><i>◆</i><span></span></div>
       </div>
+
+      <div class="filter-row">
+        <button class="filter active">All Items</button>
+        <button class="filter">Chicken Items</button>
+        <button class="filter">Mutton Items</button>
+        <button class="filter">Fish Items</button>
+        <button class="filter">Breads</button>
+        <button class="filter">Combos</button>
+      </div>
+
       <div class="menu-grid" id="menuGrid"></div>
-      <button class="gold-btn center" onclick="openOrder()">View Full Menu</button>
+
+      <button class="primary-btn full-menu-btn" onclick="openOrder()">View Full Menu &nbsp; →</button>
     </section>
 
-    <section id="about" class="about section">
+    <section class="about-section section" id="about">
       <div class="about-copy">
-        <p class="section-script">About</p>
+        <div class="script-title">About</div>
         <h2>HAJI ALTHAF</h2>
         <p>Haji Althaf Delhi Fried Chicken is a place where taste meets tradition. We bring you the rich flavors of Delhi with a perfect blend of spices and premium quality ingredients.</p>
         <p>Our mission is to serve hygienic, delicious and affordable food that keeps you coming back for more.</p>
-        <button class="gold-btn" onclick="document.querySelector('#contact').scrollIntoView({behavior:'smooth'})">Know More</button>
+        <button class="primary-btn" onclick="scrollToId('contact')">Know More &nbsp; →</button>
       </div>
-      <div class="about-photo">
-        <div class="big-chicken">
-          <div class="fried-piece a"></div><div class="fried-piece b"></div><div class="fried-piece c"></div>
-          <div class="fried-piece d"></div><div class="fried-piece e"></div>
+
+      <div class="about-image">
+        <img src="assets/about-food.jpg" alt="Haji Althaf signature fried chicken">
+        <div class="taste-note">Taste<br>The Tradition</div>
+      </div>
+
+      <div class="about-points">
+        <div class="about-point"><span>♥</span><div><b>Hygienic Food</b><small>We maintain the highest standards of hygiene in our kitchen.</small></div></div>
+        <div class="about-point"><span>♧</span><div><b>Best Spices</b><small>A perfect blend of handpicked spices for the best taste.</small></div></div>
+        <div class="about-point"><span>♨</span><div><b>Customer Satisfaction</b><small>Your satisfaction is our priority. We serve with love.</small></div></div>
+      </div>
+    </section>
+
+    <section class="gallery-section section" id="gallery">
+      <div class="gallery-heading">
+        <div>
+          <div class="script-title">Our Gallery</div>
+        </div>
+        <a href="#gallery">View More →</a>
+      </div>
+      <div class="gallery-grid">
+        <img src="assets/gallery-1.jpg" alt="Fried chicken">
+        <img src="assets/gallery-2.jpg" alt="Restaurant interior">
+        <img src="assets/gallery-3.jpg" alt="Chicken kebab">
+        <img src="assets/gallery-4.jpg" alt="Restaurant mood">
+        <img src="assets/gallery-5.jpg" alt="Crispy chicken">
+        <img src="assets/gallery-6.jpg" alt="Haji Althaf exterior">
+      </div>
+    </section>
+
+    <section class="reviews-section section" id="reviews">
+      <div class="reviews-layout">
+        <div class="review-title-block">
+          <div class="script-title">What Our</div>
+          <h2>Customers Say</h2>
+          <div class="stars">★★★★★</div>
+        </div>
+
+        <div class="review-cards">
+          <article>
+            <div class="review-top"><div class="avatar">◉</div><div><b>Ali Khan</b><div class="stars">★★★★★</div></div><span>”</span></div>
+            <p>Best fried chicken in Delhi! Amazing taste and great quality.</p>
+          </article>
+          <article>
+            <div class="review-top"><div class="avatar">◉</div><div><b>Sara Ahmed</b><div class="stars">★★★★★</div></div><span>”</span></div>
+            <p>Crispy, juicy and full of flavor. Highly recommended!</p>
+          </article>
+          <article>
+            <div class="review-top"><div class="avatar">◉</div><div><b>Rohit Verma</b><div class="stars">★★★★★</div></div><span>”</span></div>
+            <p>Loved the chicken pakoda and kabab. Will order again!</p>
+          </article>
         </div>
       </div>
-      <div class="about-points">
-        <div><span>♢</span><b>Hygienic Food</b><small>We maintain the highest standards<br>of hygiene in our kitchen.</small></div>
-        <div><span>♧</span><b>Best Spices</b><small>A perfect blend of handpicked<br>spices for the best taste.</small></div>
-        <div><span>♨</span><b>Customer Satisfaction</b><small>Your satisfaction is our priority.<br>We serve with love.</small></div>
-      </div>
+      <div class="review-dots"><span class="active"></span><span></span><span></span><span></span></div>
     </section>
 
-    <section id="gallery" class="gallery section">
-      <div class="section-head"><p>See Our Food</p><h2>GALLERY</h2></div>
-      <div class="gallery-grid">
-        <div class="gallery-card g1"></div><div class="gallery-card g2"></div>
-        <div class="gallery-card g3"></div><div class="gallery-card g4"></div>
+    <section class="cta-section">
+      <div>
+        <div class="script-title">Craving Something Delicious?</div>
+        <h2>ORDER NOW & ENJOY THE BEST FRIED CHICKEN IN TOWN!</h2>
       </div>
-    </section>
-
-    <section id="reviews" class="reviews section">
-      <div class="section-head"><p>What People Say</p><h2>REVIEWS</h2></div>
-      <div class="review-grid">
-        <article><div class="stars">★★★★★</div><p>“Crispy, spicy and absolutely delicious. The authentic Delhi taste is amazing!”</p><b>— Happy Customer</b></article>
-        <article><div class="stars">★★★★★</div><p>“Fresh food, generous portions and quick service. Definitely ordering again.”</p><b>— Food Lover</b></article>
-        <article><div class="stars">★★★★★</div><p>“The chicken fry is the highlight. Great taste at a reasonable price.”</p><b>— Regular Customer</b></article>
-      </div>
-    </section>
-
-    <section class="cta">
-      <div><p>Craving Something Delicious?</p><h2>ORDER NOW & ENJOY THE BEST FRIED CHICKEN IN TOWN!</h2></div>
-      <button class="gold-btn" onclick="openOrder()">Order Now 🛒</button>
+      <button class="primary-btn" onclick="openOrder()">Order Now 🛒</button>
     </section>
   </main>
 
   <footer id="contact">
-    <div class="footer-brand brand">
-      <div class="brand-mark">♨</div>
-      <div><strong>HAJI ALTHAF</strong><small>Delhi Fried Chicken</small></div>
+    <div class="footer-brand">
+      <a class="logo" href="#home">
+        <div class="logo-emblem">♨</div>
+        <div><div class="logo-main">HAJI ALTHAF</div><div class="logo-sub">Delhi Fried Chicken</div></div>
+      </a>
     </div>
+
     <div><h3>Quick Links</h3><a href="#home">Home</a><a href="#menu">Menu</a><a href="#about">About Us</a><a href="#gallery">Gallery</a><a href="#reviews">Reviews</a><a href="#contact">Contact</a></div>
     <div><h3>Our Menu</h3><span>Chicken Items</span><span>Mutton Items</span><span>Fish Items</span><span>Breads</span><span>Combos</span></div>
     <div><h3>Contact Us</h3><span>📍 123, Main Road, Delhi - 110001</span><span>📞 +91 98765 43210</span><span>✉ hajialthafchicken@gmail.com</span><span>◷ Mon - Sun: 11:00 AM - 11:00 PM</span></div>
-    <div><h3>Follow Us</h3><div class="socials"><span>f</span><span>◎</span><span>▶</span></div></div>
-    <div class="copyright">© 2024 Haji Althaf Delhi Fried Chicken. All Rights Reserved. <span>Designed with ♥ for Food Lovers</span></div>
+    <div><h3>Follow Us</h3><div class="footer-social"><span>f</span><span>◎</span><span>▶</span></div></div>
+
+    <div class="copyright"><span>© 2024 Haji Althaf Delhi Fried Chicken. All Rights Reserved.</span><span>Designed with <b>♥</b> for Food Lovers</span></div>
   </footer>
 
-  <div class="modal" id="orderModal">
-    <div class="modal-box">
-      <button class="close" onclick="closeOrder()">×</button>
-      <p class="section-script">Fresh & Hot</p>
+  <div class="order-modal" id="orderModal">
+    <div class="order-box">
+      <button class="close-btn" onclick="closeOrder()">×</button>
+      <div class="script-title">Fresh & Hot</div>
       <h2>PLACE YOUR ORDER</h2>
       <div id="cartItems"></div>
-      <div class="total">Total: ₹<span id="total">0</span></div>
-      <button class="gold-btn" onclick="sendOrder()">Order on WhatsApp</button>
+      <div class="cart-total">Total: ₹<span id="cartTotal">0</span></div>
+      <button class="primary-btn whatsapp-btn" onclick="sendWhatsApp()">Order on WhatsApp</button>
     </div>
   </div>
 
