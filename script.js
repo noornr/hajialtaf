@@ -1,83 +1,83 @@
-/* =========================================================
-   HAJI ALTHAF — PREMIUM SCRIPT
-   ========================================================= */
-
 const products = [
-  ["Full Chicken Fry", 480, "assets/menu-1.jpg", "chicken"],
-  ["Half Chicken Fry", 240, "assets/menu-2.jpg", "chicken"],
-  ["Chest Pcs", 140, "assets/menu-3.jpg", "chicken"],
-  ["Leg Pcs", 120, "assets/menu-4.jpg", "chicken"],
-  ["Chicken Pakoda", 120, "assets/menu-5.jpg", "chicken"],
-  ["Chicken Kabab", 140, "assets/menu-6.jpg", "chicken"],
-  ["Chicken Lollipop", 140, "assets/menu-7.jpg", "chicken"],
-  ["Chicken Khima", 80, "assets/menu-8.jpg", "chicken"],
-  ["Apollo Fish Rost", 200, "assets/menu-9.jpg", "fish"],
-  ["Mutton Boti", 80, "assets/menu-10.jpg", "mutton"],
-  ["Mutton Paya", 120, "assets/menu-11.jpg", "mutton"],
-  ["Rumali Roti", 20, "assets/menu-12.jpg", "breads"]
+  ["Full Chicken Fry",480,"assets/menu-1.jpg","chicken"],
+  ["Half Chicken Fry",240,"assets/menu-2.jpg","chicken"],
+  ["Chest Pcs",140,"assets/menu-3.jpg","chicken"],
+  ["Leg Pcs",120,"assets/menu-4.jpg","chicken"],
+  ["Chicken Pakoda",120,"assets/menu-5.jpg","chicken"],
+  ["Chicken Kabab",140,"assets/menu-6.jpg","chicken"],
+  ["Chicken Lollipop",140,"assets/menu-7.jpg","chicken"],
+  ["Chicken Khima",80,"assets/menu-8.jpg","chicken"],
+  ["Apollo Fish Rost",200,"assets/menu-9.jpg","fish"],
+  ["Mutton Boti",80,"assets/menu-10.jpg","mutton"],
+  ["Mutton Paya",120,"assets/menu-11.jpg","mutton"],
+  ["Rumali Roti",20,"assets/menu-12.jpg","bread"]
 ];
 
 let cart = {};
-let currentFilter = "all";
+let activeFilter = "all";
+
 
 /* =========================================================
    MENU
-   ========================================================= */
+========================================================= */
 
-function renderMenu(filter = currentFilter) {
+function renderMenu(){
 
   const grid = document.getElementById("menuGrid");
 
-  if (!grid) return;
+  if(!grid) return;
 
-  currentFilter = filter;
-
-  const filteredProducts =
-    filter === "all"
+  const items =
+    activeFilter === "all"
       ? products
-      : products.filter(product => product[3] === filter);
+      : products.filter(p => p[3] === activeFilter);
 
-  grid.innerHTML = filteredProducts.map((product) => {
+  if(!items.length){
 
-    const originalIndex = products.indexOf(product);
+    grid.innerHTML = `
+      <div class="menu-empty">
+        <span>✦</span>
+        <h3>More coming soon</h3>
+        <p>New ${activeFilter} favourites will be added here.</p>
+      </div>
+    `;
+
+    return;
+  }
+
+  grid.innerHTML = items.map(p => {
+
+    const index = products.indexOf(p);
 
     return `
-      <article
-        class="menu-card"
-        data-index="${originalIndex}"
-        onclick="addToCart(${originalIndex})"
-      >
+      <article class="menu-card" onclick="addToCart(${index})">
 
         <div class="menu-image-wrap">
 
           <img
-            src="${product[2]}"
-            alt="${product[0]}"
+            src="${p[2]}"
+            alt="${p[0]}"
             loading="lazy"
           >
 
-          <div class="menu-image-overlay"></div>
+          <span class="menu-image-tag">
+            FRESH
+          </span>
 
-          <button
-            class="menu-add"
-            aria-label="Add ${product[0]}"
-            onclick="event.stopPropagation(); addToCart(${originalIndex})"
-          >
+          <span class="menu-add">
             +
-          </button>
+          </span>
 
         </div>
 
-        <div class="menu-card-content">
+        <div class="menu-card-body">
 
-          <h3>${product[0]}</h3>
+          <h3>
+            ${p[0]}
+          </h3>
 
-          <div class="menu-card-bottom">
-            <div class="price">₹${product[1]}</div>
-
-            <span class="order-label">
-              ADD TO ORDER
-            </span>
+          <div class="price">
+            ₹${p[1]}
           </div>
 
         </div>
@@ -86,69 +86,41 @@ function renderMenu(filter = currentFilter) {
     `;
 
   }).join("");
-
-  revealMenuCards();
 }
 
 
 /* =========================================================
    ADD TO CART
-   ========================================================= */
+========================================================= */
 
-function addToCart(index) {
+function addToCart(i){
 
-  if (!products[index]) return;
-
-  cart[index] = (cart[index] || 0) + 1;
-
-  updateCartCount();
+  cart[i] = (cart[i] || 0) + 1;
 
   openOrder();
-
-  renderCart();
-}
-
-
-/* =========================================================
-   CART COUNT
-   ========================================================= */
-
-function updateCartCount() {
-
-  const count = Object.values(cart)
-    .reduce((total, quantity) => total + quantity, 0);
-
-  const cartCounters = document.querySelectorAll(
-    ".cart-count, .floating-cart-count"
-  );
-
-  cartCounters.forEach(counter => {
-    counter.textContent = count;
-
-    counter.classList.remove("cart-pop");
-
-    void counter.offsetWidth;
-
-    if (count > 0) {
-      counter.classList.add("cart-pop");
-    }
-  });
 }
 
 
 /* =========================================================
    OPEN ORDER MODAL
-   ========================================================= */
+========================================================= */
 
-function openOrder() {
+function openOrder(){
 
   const modal = document.getElementById("orderModal");
 
-  if (!modal) return;
+  if(!modal) return;
 
   modal.classList.add("show");
 
-  document.body.classList.add("modal-open");
+  modal.setAttribute(
+    "aria-hidden",
+    "false"
+  );
+
+  document.body.classList.add(
+    "modal-open"
+  );
 
   renderCart();
 }
@@ -156,140 +128,156 @@ function openOrder() {
 
 /* =========================================================
    CLOSE ORDER MODAL
-   ========================================================= */
+========================================================= */
 
-function closeOrder() {
+function closeOrder(){
 
   const modal = document.getElementById("orderModal");
 
-  if (!modal) return;
+  if(!modal) return;
 
   modal.classList.remove("show");
 
-  document.body.classList.remove("modal-open");
+  modal.setAttribute(
+    "aria-hidden",
+    "true"
+  );
+
+  document.body.classList.remove(
+    "modal-open"
+  );
 }
 
 
 /* =========================================================
    RENDER CART
-   ========================================================= */
+========================================================= */
 
-function renderCart() {
+function renderCart(){
 
-  const box = document.getElementById("cartItems");
+  const box =
+    document.getElementById("cartItems");
 
-  const totalElement = document.getElementById("cartTotal");
+  if(!box) return;
 
-  if (!box) return;
+  const selected =
+    Object.keys(cart).filter(
+      k => cart[k] > 0
+    );
 
-  const selected = Object.keys(cart)
-    .filter(index => cart[index] > 0);
 
-  if (!selected.length) {
+  /* EMPTY CART */
+
+  if(!selected.length){
 
     box.innerHTML = `
-      <div class="empty-cart">
-
-        <div class="empty-cart-icon">🛒</div>
-
-        <h3>Your order is empty</h3>
-
-        <p>
-          Select your favourite dishes from the menu
-          to start your order.
-        </p>
-
+      <div class="cart-empty">
+        Select a dish from the menu to add it to your order.
       </div>
     `;
 
-  } else {
+  }
 
-    box.innerHTML = selected.map(index => {
+  /* CART ITEMS */
 
-      const product = products[index];
+  else{
 
-      return `
-        <div class="cart-row">
+    box.innerHTML = selected.map(k => `
 
-          <div class="cart-product">
+      <div class="cart-row">
 
-            <img
-              src="${product[2]}"
-              alt="${product[0]}"
-            >
+        <div>
 
-            <div>
-              <strong>${product[0]}</strong>
-              <small>₹${product[1]} each</small>
-            </div>
+          <span class="cart-name">
+            ${products[k][0]}
+          </span>
 
-          </div>
-
-          <div class="cart-right">
-
-            <strong>
-              ₹${product[1] * cart[index]}
-            </strong>
-
-            <div class="qty">
-
-              <button
-                type="button"
-                onclick="changeQty(${index}, -1)"
-                aria-label="Decrease quantity"
-              >
-                −
-              </button>
-
-              <span>
-                ${cart[index]}
-              </span>
-
-              <button
-                type="button"
-                onclick="changeQty(${index}, 1)"
-                aria-label="Increase quantity"
-              >
-                +
-              </button>
-
-            </div>
-
-          </div>
+          <small>
+            ₹${products[k][1]} each
+          </small>
 
         </div>
-      `;
 
-    }).join("");
+
+        <div class="cart-right">
+
+          <strong>
+            ₹${products[k][1] * cart[k]}
+          </strong>
+
+
+          <span class="qty">
+
+            <button
+              onclick="changeQty(${k},-1)"
+              aria-label="Decrease quantity"
+            >
+              −
+            </button>
+
+
+            <b>
+              ${cart[k]}
+            </b>
+
+
+            <button
+              onclick="changeQty(${k},1)"
+              aria-label="Increase quantity"
+            >
+              +
+            </button>
+
+          </span>
+
+        </div>
+
+      </div>
+
+    `).join("");
+
   }
 
-  const total = selected.reduce(
-    (sum, index) =>
-      sum + products[index][1] * cart[index],
-    0
-  );
 
-  if (totalElement) {
-    totalElement.textContent = total;
+  /* TOTAL */
+
+  const total =
+    selected.reduce(
+      (s,k) =>
+        s + products[k][1] * cart[k],
+      0
+    );
+
+
+  const totalElement =
+    document.getElementById("cartTotal");
+
+  if(totalElement){
+
+    totalElement.textContent =
+      total;
+
   }
 
-  updateCartCount();
 }
 
 
 /* =========================================================
    CHANGE QUANTITY
-   ========================================================= */
+========================================================= */
 
-function changeQty(index, difference) {
+function changeQty(i,d){
 
-  if (!products[index]) return;
+  cart[i] =
+    (cart[i] || 0) + d;
 
-  cart[index] = (cart[index] || 0) + difference;
 
-  if (cart[index] <= 0) {
-    delete cart[index];
+  if(cart[i] <= 0){
+
+    delete cart[i];
+
   }
+
 
   renderCart();
 }
@@ -297,877 +285,429 @@ function changeQty(index, difference) {
 
 /* =========================================================
    WHATSAPP ORDER
-   ========================================================= */
+========================================================= */
 
-function sendWhatsApp() {
+function sendWhatsApp(){
 
-  const selected = Object.keys(cart)
-    .filter(index => cart[index] > 0);
+  const selected =
+    Object.keys(cart).filter(
+      k => cart[k] > 0
+    );
 
-  if (!selected.length) {
 
-    showToast(
+  if(!selected.length){
+
+    alert(
       "Please select at least one item."
     );
 
     return;
+
   }
 
-  const total = selected.reduce(
-    (sum, index) =>
-      sum + products[index][1] * cart[index],
-    0
-  );
 
-  let message =
-    "Hello Haji Althaf! 👋\n\n" +
-    "I want to order:\n\n";
+  const total =
+    selected.reduce(
+      (s,k) =>
+        s + products[k][1] * cart[k],
+      0
+    );
 
-  selected.forEach(index => {
 
-    const product = products[index];
+  const lines =
+    selected.map(
+      k =>
+        `${products[k][0]} x ${cart[k]} = ₹${products[k][1] * cart[k]}`
+    );
 
-    message +=
-      `${product[0]} × ${cart[index]} = ₹${product[1] * cart[index]}\n`;
 
-  });
+  const text = [
+    "Hello Haji Althaf! I want to order:",
+    ...lines,
+    "",
+    `Total: ₹${total}`
+  ].join("\n");
 
-  message +=
-    `\nTotal: ₹${total}\n\n` +
-    "Please confirm my order. Thank you!";
-
-  const phone = "919876543210";
-
-  const whatsappURL =
-    "https://wa.me/" +
-    phone +
-    "?text=" +
-    encodeURIComponent(message);
 
   window.open(
-    whatsappURL,
+    "https://wa.me/919876543210?text=" +
+    encodeURIComponent(text),
     "_blank",
-    "noopener,noreferrer"
+    "noopener"
   );
+
 }
 
 
 /* =========================================================
    SMOOTH SCROLL
-   ========================================================= */
+========================================================= */
 
-function scrollToId(id) {
+function scrollToId(id){
 
-  const element = document.getElementById(id);
+  const element =
+    document.getElementById(id);
 
-  if (!element) return;
+  if(!element) return;
 
   element.scrollIntoView({
-    behavior: "smooth",
-    block: "start"
+    behavior: "smooth"
   });
+
 }
 
 
 /* =========================================================
-   MOBILE NAVIGATION
-   ========================================================= */
+   NAVIGATION
+========================================================= */
 
-function setupMobileNavigation() {
+function initNavigation(){
 
   const toggle =
-    document.getElementById("mobileToggle");
-
-  const nav =
-    document.getElementById("mainNav");
-
-  if (!toggle || !nav) return;
-
-  toggle.addEventListener("click", () => {
-
-    const isOpen =
-      nav.classList.toggle("open");
-
-    toggle.setAttribute(
-      "aria-expanded",
-      isOpen ? "true" : "false"
+    document.getElementById(
+      "mobileToggle"
     );
 
-    toggle.innerHTML =
-      isOpen ? "×" : "☰";
+  const nav =
+    document.getElementById(
+      "mainNav"
+    );
 
-  });
+  const header =
+    document.getElementById(
+      "siteHeader"
+    );
 
 
-  document.querySelectorAll(".main-nav a")
-    .forEach(link => {
+  if(!toggle || !nav) return;
 
-      link.addEventListener("click", () => {
 
-        nav.classList.remove("open");
+  /* MOBILE MENU */
 
-        toggle.setAttribute(
-          "aria-expanded",
-          "false"
+  toggle.addEventListener(
+    "click",
+    () => {
+
+      const open =
+        nav.classList.toggle(
+          "open"
         );
 
-        toggle.innerHTML = "☰";
 
-      });
+      toggle.classList.toggle(
+        "is-open",
+        open
+      );
+
+
+      toggle.setAttribute(
+        "aria-expanded",
+        String(open)
+      );
+
+    }
+  );
+
+
+  /* CLOSE MOBILE MENU */
+
+  document
+    .querySelectorAll(
+      ".main-nav a"
+    )
+    .forEach(a => {
+
+      a.addEventListener(
+        "click",
+        () => {
+
+          nav.classList.remove(
+            "open"
+          );
+
+
+          toggle.classList.remove(
+            "is-open"
+          );
+
+
+          toggle.setAttribute(
+            "aria-expanded",
+            "false"
+          );
+
+        }
+      );
 
     });
 
 
-  document.addEventListener("click", event => {
+  /* HEADER SCROLL EFFECT */
 
-    if (
-      nav.classList.contains("open") &&
-      !nav.contains(event.target) &&
-      !toggle.contains(event.target)
-    ) {
+  if(header){
 
-      nav.classList.remove("open");
+    window.addEventListener(
+      "scroll",
+      () => {
 
-      toggle.setAttribute(
-        "aria-expanded",
-        "false"
-      );
+        header.classList.toggle(
+          "scrolled",
+          window.scrollY > 20
+        );
 
-      toggle.innerHTML = "☰";
-    }
+      },
+      {
+        passive: true
+      }
+    );
 
-  });
+  }
 
 }
 
 
 /* =========================================================
    MENU FILTERS
-   ========================================================= */
+========================================================= */
 
-function setupFilters() {
+function initFilters(){
 
-  const filters =
-    document.querySelectorAll(".filter");
+  document
+    .querySelectorAll(".filter")
+    .forEach(btn => {
 
-  filters.forEach(button => {
+      btn.addEventListener(
+        "click",
+        () => {
 
-    button.addEventListener("click", () => {
+          document
+            .querySelectorAll(
+              ".filter"
+            )
+            .forEach(b =>
+              b.classList.remove(
+                "active"
+              )
+            );
 
-      filters.forEach(
-        item => item.classList.remove("active")
+
+          btn.classList.add(
+            "active"
+          );
+
+
+          activeFilter =
+            btn.dataset.filter ||
+            "all";
+
+
+          renderMenu();
+
+        }
       );
 
-      button.classList.add("active");
-
-      const text =
-        button.textContent.trim().toLowerCase();
-
-      let filter = "all";
-
-      if (text.includes("chicken")) {
-        filter = "chicken";
-      }
-
-      else if (text.includes("mutton")) {
-        filter = "mutton";
-      }
-
-      else if (text.includes("fish")) {
-        filter = "fish";
-      }
-
-      else if (text.includes("bread")) {
-        filter = "breads";
-      }
-
-      else if (text.includes("combo")) {
-        filter = "combos";
-      }
-
-      renderMenu(filter);
-
-      const menuGrid =
-        document.getElementById("menuGrid");
-
-      if (menuGrid) {
-
-        menuGrid.classList.remove("filter-refresh");
-
-        void menuGrid.offsetWidth;
-
-        menuGrid.classList.add("filter-refresh");
-      }
-
     });
-
-  });
 
 }
 
 
 /* =========================================================
    SCROLL REVEAL
-   ========================================================= */
+========================================================= */
 
-function setupScrollReveal() {
+function initReveal(){
 
-  const revealElements =
+  const elements =
     document.querySelectorAll(
-      ".section, .feature-bar, .menu-card, .gallery-grid img, " +
-      ".review-cards article, .about-point, .cta-section"
+      ".reveal"
     );
 
-  if (!revealElements.length) return;
 
-  if (!("IntersectionObserver" in window)) {
+  if(!("IntersectionObserver" in window)){
 
-    revealElements.forEach(
-      element => element.classList.add("revealed")
+    elements.forEach(
+      el =>
+        el.classList.add(
+          "visible"
+        )
     );
 
     return;
+
   }
+
 
   const observer =
     new IntersectionObserver(
       entries => {
 
-        entries.forEach(entry => {
+        entries.forEach(
+          entry => {
 
-          if (!entry.isIntersecting) return;
+            if(entry.isIntersecting){
 
-          entry.target.classList.add("revealed");
+              entry.target.classList.add(
+                "visible"
+              );
 
-          observer.unobserve(entry.target);
 
-        });
+              observer.unobserve(
+                entry.target
+              );
+
+            }
+
+          }
+        );
 
       },
       {
         threshold: 0.12,
-        rootMargin: "0px 0px -40px 0px"
+        rootMargin:
+          "0px 0px -40px 0px"
       }
     );
 
-  revealElements.forEach(element => {
 
-    element.classList.add("reveal");
+  elements.forEach(
+    el =>
+      observer.observe(el)
+  );
 
-    observer.observe(element);
-
-  });
-
-}
-
-
-/* =========================================================
-   MENU CARD REVEAL
-   ========================================================= */
-
-function revealMenuCards() {
-
-  const cards =
-    document.querySelectorAll(
-      ".menu-card"
-    );
-
-  cards.forEach((card, index) => {
-
-    card.style.transitionDelay =
-      `${Math.min(index * 45, 300)}ms`;
-
-  });
-
-}
-
-
-/* =========================================================
-   HEADER SCROLL EFFECT
-   ========================================================= */
-
-function setupHeaderScroll() {
-
-  const header =
-    document.querySelector(".site-header");
-
-  if (!header) return;
-
-  let ticking = false;
-
-  function updateHeader() {
-
-    if (window.scrollY > 40) {
-
-      header.classList.add("scrolled");
-
-    } else {
-
-      header.classList.remove("scrolled");
-
-    }
-
-    ticking = false;
-  }
-
-  window.addEventListener("scroll", () => {
-
-    if (!ticking) {
-
-      window.requestAnimationFrame(
-        updateHeader
-      );
-
-      ticking = true;
-    }
-
-  }, { passive: true });
-
-  updateHeader();
 }
 
 
 /* =========================================================
    SCROLL PROGRESS
-   ========================================================= */
+========================================================= */
 
-function setupScrollProgress() {
+function initScrollProgress(){
 
-  let progress =
-    document.querySelector(".scroll-progress");
+  const progress =
+    document.getElementById(
+      "scrollProgress"
+    );
 
-  if (!progress) {
 
-    progress =
-      document.createElement("div");
+  if(!progress) return;
 
-    progress.className =
-      "scroll-progress";
 
-    document.body.prepend(progress);
-  }
+  window.addEventListener(
+    "scroll",
+    () => {
 
-  let ticking = false;
+      const scrollable =
+        document.documentElement
+          .scrollHeight -
+        window.innerHeight;
 
-  function updateProgress() {
 
-    const scrollTop =
-      window.scrollY;
+      const ratio =
+        scrollable > 0
+          ? window.scrollY / scrollable
+          : 0;
 
-    const documentHeight =
-      document.documentElement.scrollHeight -
-      window.innerHeight;
 
-    const percentage =
-      documentHeight > 0
-        ? (scrollTop / documentHeight) * 100
-        : 0;
+      progress.style.transform =
+        `scaleX(${ratio})`;
 
-    progress.style.width =
-      `${percentage}%`;
-
-    ticking = false;
-  }
-
-  window.addEventListener("scroll", () => {
-
-    if (!ticking) {
-
-      window.requestAnimationFrame(
-        updateProgress
-      );
-
-      ticking = true;
+    },
+    {
+      passive: true
     }
-
-  }, { passive: true });
-
-  updateProgress();
-}
-
-
-/* =========================================================
-   ACTIVE NAVIGATION
-   ========================================================= */
-
-function setupActiveNavigation() {
-
-  const sections =
-    document.querySelectorAll(
-      "main section[id], footer[id]"
-    );
-
-  const links =
-    document.querySelectorAll(
-      ".main-nav a"
-    );
-
-  if (!sections.length || !links.length) return;
-
-  const observer =
-    new IntersectionObserver(
-      entries => {
-
-        entries.forEach(entry => {
-
-          if (!entry.isIntersecting) return;
-
-          const id =
-            entry.target.id;
-
-          links.forEach(link => {
-
-            link.classList.toggle(
-              "active",
-              link.getAttribute("href") === `#${id}`
-            );
-
-          });
-
-        });
-
-      },
-      {
-        rootMargin:
-          "-30% 0px -60% 0px",
-        threshold: 0
-      }
-    );
-
-  sections.forEach(
-    section => observer.observe(section)
   );
 
 }
 
 
 /* =========================================================
-   HERO PARALLAX
-   ========================================================= */
+   HERO MOUSE / POINTER MOTION
+========================================================= */
 
-function setupHeroParallax() {
-
-  const heroImage =
-    document.querySelector(
-      ".hero-visual img"
-    );
+function initHeroMotion(){
 
   const hero =
-    document.querySelector(".hero");
+    document.getElementById(
+      "heroSection"
+    );
 
-  if (!heroImage || !hero) return;
 
-  if (
+  if(!hero) return;
+
+
+  const visual =
+    hero.querySelector(
+      ".hero-visual"
+    );
+
+
+  if(!visual) return;
+
+
+  if(
     window.matchMedia(
       "(prefers-reduced-motion: reduce)"
     ).matches
-  ) return;
+  ){
 
-  let ticking = false;
+    return;
 
-  function updateParallax() {
-
-    if (window.innerWidth <= 700) {
-
-      heroImage.style.transform = "";
-
-      ticking = false;
-
-      return;
-    }
-
-    const rect =
-      hero.getBoundingClientRect();
-
-    const progress =
-      -rect.top / Math.max(rect.height, 1);
-
-    const movement =
-      Math.max(
-        -18,
-        Math.min(18, progress * 20)
-      );
-
-    heroImage.style.transform =
-      `translate3d(0, ${movement}px, 0)`;
-
-    ticking = false;
   }
 
-  window.addEventListener("scroll", () => {
 
-    if (!ticking) {
+  /* POINTER MOVE */
 
-      window.requestAnimationFrame(
-        updateParallax
-      );
-
-      ticking = true;
-    }
-
-  }, { passive: true });
-
-  updateParallax();
-}
-
-
-/* =========================================================
-   GALLERY LIGHTBOX
-   ========================================================= */
-
-function setupGalleryLightbox() {
-
-  const images =
-    document.querySelectorAll(
-      ".gallery-grid img"
-    );
-
-  if (!images.length) return;
-
-  let lightbox =
-    document.getElementById(
-      "galleryLightbox"
-    );
-
-  if (!lightbox) {
-
-    lightbox =
-      document.createElement("div");
-
-    lightbox.id =
-      "galleryLightbox";
-
-    lightbox.className =
-      "gallery-lightbox";
-
-    lightbox.innerHTML = `
-      <button
-        class="lightbox-close"
-        aria-label="Close gallery"
-      >
-        ×
-      </button>
-
-      <button
-        class="lightbox-prev"
-        aria-label="Previous image"
-      >
-        ‹
-      </button>
-
-      <img
-        class="lightbox-image"
-        alt=""
-      >
-
-      <button
-        class="lightbox-next"
-        aria-label="Next image"
-      >
-        ›
-      </button>
-    `;
-
-    document.body.appendChild(lightbox);
-  }
-
-  const image =
-    lightbox.querySelector(
-      ".lightbox-image"
-    );
-
-  const close =
-    lightbox.querySelector(
-      ".lightbox-close"
-    );
-
-  const previous =
-    lightbox.querySelector(
-      ".lightbox-prev"
-    );
-
-  const next =
-    lightbox.querySelector(
-      ".lightbox-next"
-    );
-
-  let currentIndex = 0;
-
-  function showImage(index) {
-
-    currentIndex =
-      (index + images.length) %
-      images.length;
-
-    const selected =
-      images[currentIndex];
-
-    image.src =
-      selected.src;
-
-    image.alt =
-      selected.alt || "";
-
-    lightbox.classList.add("show");
-
-    document.body.classList.add(
-      "modal-open"
-    );
-  }
-
-  function closeLightbox() {
-
-    lightbox.classList.remove(
-      "show"
-    );
-
-    document.body.classList.remove(
-      "modal-open"
-    );
-  }
-
-  images.forEach((img, index) => {
-
-    img.style.cursor = "zoom-in";
-
-    img.addEventListener("click", () => {
-
-      showImage(index);
-
-    });
-
-  });
-
-  close.addEventListener(
-    "click",
-    closeLightbox
-  );
-
-  previous.addEventListener(
-    "click",
-    () => showImage(currentIndex - 1)
-  );
-
-  next.addEventListener(
-    "click",
-    () => showImage(currentIndex + 1)
-  );
-
-  lightbox.addEventListener(
-    "click",
-    event => {
-
-      if (event.target === lightbox) {
-        closeLightbox();
-      }
-
-    }
-  );
-
-  document.addEventListener(
-    "keydown",
-    event => {
-
-      if (
-        !lightbox.classList.contains("show")
-      ) return;
-
-      if (event.key === "Escape") {
-        closeLightbox();
-      }
-
-      if (event.key === "ArrowLeft") {
-        showImage(currentIndex - 1);
-      }
-
-      if (event.key === "ArrowRight") {
-        showImage(currentIndex + 1);
-      }
-
-    }
-  );
-}
-
-
-/* =========================================================
-   TOAST
-   ========================================================= */
-
-function showToast(message) {
-
-  let toast =
-    document.querySelector(".premium-toast");
-
-  if (!toast) {
-
-    toast =
-      document.createElement("div");
-
-    toast.className =
-      "premium-toast";
-
-    document.body.appendChild(toast);
-  }
-
-  toast.textContent =
-    message;
-
-  toast.classList.add("show");
-
-  clearTimeout(
-    toast._timer
-  );
-
-  toast._timer =
-    setTimeout(() => {
-
-      toast.classList.remove("show");
-
-    }, 2500);
-}
-
-
-/* =========================================================
-   ESCAPE KEY
-   ========================================================= */
-
-function setupEscapeHandler() {
-
-  document.addEventListener(
-    "keydown",
-    event => {
-
-      if (event.key !== "Escape") return;
-
-      const orderModal =
-        document.getElementById(
-          "orderModal"
-        );
-
-      if (
-        orderModal &&
-        orderModal.classList.contains("show")
-      ) {
-
-        closeOrder();
-
-      }
-
-    }
-  );
-
-}
-
-
-/* =========================================================
-   ORDER MODAL BACKDROP
-   ========================================================= */
-
-function setupOrderModal() {
-
-  const modal =
-    document.getElementById(
-      "orderModal"
-    );
-
-  if (!modal) return;
-
-  modal.addEventListener(
-    "click",
-    event => {
-
-      if (event.target === modal) {
-        closeOrder();
-      }
-
-    }
-  );
-
-}
-
-
-/* =========================================================
-   IMAGE ERROR HANDLING
-   ========================================================= */
-
-function setupImageFallbacks() {
-
-  document.addEventListener(
-    "error",
-    event => {
-
-      const image =
-        event.target;
-
-      if (
-        image &&
-        image.tagName === "IMG"
-      ) {
-
-        image.classList.add(
-          "image-error"
-        );
-
-      }
-
-    },
-    true
-  );
-
-}
-
-
-/* =========================================================
-   BUTTON RIPPLE EFFECT
-   ========================================================= */
-
-function setupButtonEffects() {
-
-  document.addEventListener(
-    "click",
-    event => {
-
-      const button =
-        event.target.closest(
-          ".primary-btn, .outline-btn, .filter"
-        );
-
-      if (!button) return;
-
-      const ripple =
-        document.createElement("span");
-
-      ripple.className =
-        "button-ripple";
+  hero.addEventListener(
+    "pointermove",
+    e => {
 
       const rect =
-        button.getBoundingClientRect();
+        hero.getBoundingClientRect();
 
-      const size =
-        Math.max(
-          rect.width,
-          rect.height
-        );
 
-      ripple.style.width =
-        `${size}px`;
+      const x =
+        (e.clientX - rect.left) /
+          rect.width -
+        0.5;
 
-      ripple.style.height =
-        `${size}px`;
 
-      ripple.style.left =
-        `${event.clientX - rect.left - size / 2}px`;
+      const y =
+        (e.clientY - rect.top) /
+          rect.height -
+        0.5;
 
-      ripple.style.top =
-        `${event.clientY - rect.top - size / 2}px`;
 
-      button.appendChild(ripple);
+      visual.style.setProperty(
+        "--mx",
+        `${x * 12}px`
+      );
 
-      setTimeout(() => {
 
-        ripple.remove();
+      visual.style.setProperty(
+        "--my",
+        `${y * 8}px`
+      );
 
-      }, 600);
+    }
+  );
+
+
+  /* RESET */
+
+  hero.addEventListener(
+    "pointerleave",
+    () => {
+
+      visual.style.setProperty(
+        "--mx",
+        "0px"
+      );
+
+
+      visual.style.setProperty(
+        "--my",
+        "0px"
+      );
 
     }
   );
@@ -1176,42 +716,66 @@ function setupButtonEffects() {
 
 
 /* =========================================================
-   INITIALIZE
-   ========================================================= */
+   ESC KEY
+========================================================= */
 
 document.addEventListener(
-  "DOMContentLoaded",
-  () => {
+  "keydown",
+  e => {
 
-    renderMenu();
+    if(e.key === "Escape"){
 
-    setupMobileNavigation();
+      closeOrder();
 
-    setupFilters();
-
-    setupScrollReveal();
-
-    setupHeaderScroll();
-
-    setupScrollProgress();
-
-    setupActiveNavigation();
-
-    setupHeroParallax();
-
-    setupGalleryLightbox();
-
-    setupEscapeHandler();
-
-    setupOrderModal();
-
-    setupImageFallbacks();
-
-    setupButtonEffects();
-
-    updateCartCount();
+    }
 
   }
 );
 
-Important: ee "script.js" tho category filters proper ga work avvali ante CSS lo ".menu-card", ".menu-image-wrap", ".menu-add", ".menu-card-content", ".cart-product", ".empty-cart", ".scroll-progress", ".gallery-lightbox", ".premium-toast", ".reveal", ".revealed" classes ki corresponding styles undali. Premium CSS file lo avi already include chesina version ni use cheyyi.
+
+/* =========================================================
+   CLOSE MODAL WHEN CLICKING OUTSIDE
+========================================================= */
+
+const orderModal =
+  document.getElementById(
+    "orderModal"
+  );
+
+
+if(orderModal){
+
+  orderModal.addEventListener(
+    "click",
+    e => {
+
+      if(
+        e.target.id ===
+        "orderModal"
+      ){
+
+        closeOrder();
+
+      }
+
+    }
+  );
+
+}
+
+
+/* =========================================================
+   INITIALIZE WEBSITE
+========================================================= */
+
+initNavigation();
+
+initFilters();
+
+initReveal();
+
+initScrollProgress();
+
+initHeroMotion();
+
+renderMenu();
